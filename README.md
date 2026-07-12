@@ -178,6 +178,19 @@ python -m pytest tests/ --run-e2e
 | `test_app_smoke.py` | main.py compilation, app construction with mock Page |
 | `test_e2e_api.py` | Live API calls: list, search, get, parquet, rows, trending, most-downloaded |
 
+### Live runtime verification
+
+The app has been verified end-to-end using a headless browser test (`scripts/verify_app.py` and `scripts/runtime_test.py`):
+
+- ✅ Flet web server starts and serves HTTP 200
+- ✅ Flet session is created when a client connects
+- ✅ `main()` runs to completion ("App started successfully" logged)
+- ✅ Page title is correctly set to "HF Dataset Explorer"
+- ✅ All 6 navigation destinations are registered
+- ✅ Initial Explore view renders and triggers the background search
+
+The Flet desktop binary requires additional system libraries (libsecret-1, etc.) which may not be available in all environments. The web mode (`ft.run(view=None, port=...)`) works in any environment with Python and a browser.
+
 ## Keyboard Shortcuts
 
 - `Ctrl+1` to `Ctrl+6` — Switch between Explore / Analytics / Compare / Favorites / History / Settings
