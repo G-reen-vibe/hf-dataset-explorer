@@ -52,53 +52,71 @@ def main(page: ft.Page) -> None:
     """Flet app entry point."""
     logger.info("Starting HF Dataset Explorer")
 
-    # --- window / shell ---
-    page.title = "HF Dataset Explorer"
-    page.window.width = 1400
-    page.window.height = 900
-    page.window.min_width = 900
-    page.window.min_height = 600
+    try:
+        # --- window / shell ---
+        page.title = "HF Dataset Explorer"
+        page.window.width = 1400
+        page.window.height = 900
+        page.window.min_width = 900
+        page.window.min_height = 600
 
-    # --- theme ---
-    apply_theme(page)
-
-    # --- state ---
-    app_state.init_page_state(page)
-    page.mrma_get_view_for_index = None  # placeholder
-
-    # --- build view factory ---
-    def apply_settings_callback():
+        # --- theme ---
         apply_theme(page)
-        if getattr(page, "nav_rail", None) and getattr(page, "content_area", None):
-            idx = page.nav_rail.selected_index
-            page.content_area.content = page.mrma_get_view_for_index(idx)
-            try:
-                page.content_area.update()
-            except Exception:
-                pass
+        logger.info("Theme applied")
 
-    get_view_for_index = routing.make_get_view_for_index(page)
-    page.mrma_get_view_for_index = get_view_for_index
+        # --- state ---
+        app_state.init_page_state(page)
+        page.mrma_get_view_for_index = None  # placeholder
 
-    # --- keyboard shortcuts (Ctrl+1..6 to switch tabs) ---
-    def _on_keyboard(e: ft.KeyboardEvent):
-        rail = getattr(page, "nav_rail", None)
-        if rail is None:
-            return
-        # Don't intercept if a TextField is focused? Flet doesn't expose this easily,
-        # so we only intercept Ctrl+digit which is unlikely to clash with text input.
-        if (e.ctrl or e.meta) and not e.shift and not e.alt:
-            if e.key in "123456":
-                idx = int(e.key) - 1
-                if idx < len(rail.destinations):
-                    rail.select(idx)
+        # --- build view factory ---
+        def apply_settings_callback():
+            apply_theme(page)
+            if getattr(page, "nav_rail", None) and getattr(page, "content_area", None):
+                idx = page.nav_rail.selected_index
+                page.content_area.content = page.mrma_get_view_for_index(idx)
+                try:
+                    page.content_area.update()
+                except Exception:
+                    pass
 
-    page.on_keyboard_event = _on_keyboard
+        get_view_for_index = routing.make_get_view_for_index(page)
+        page.mrma_get_view_for_index = get_view_for_index
+        logger.info("View factory created")
 
-    # --- show the dashboard ---
-    navigation.show_main_dashboard(page, get_view_for_index=get_view_for_index)
+        # --- keyboard shortcuts (Ctrl+1..6 to switch tabs) ---
+        def _on_keyboard(e: ft.KeyboardEvent):
+            rail = getattr(page, "nav_rail", None)
+            if rail is None:
+                return
+            # Don't intercept if a TextField is focused? Flet doesn't expose this easily,
+            # so we only intercept Ctrl+digit which is unlikely to clash with text input.
+            if (e.ctrl or e.meta) and not e.shift and not e.alt:
+                if e.key in "123456":
+                    idx = int(e.key) - 1
+                    if idx < len(rail.destinations):
+                        rail.select(idx)
 
-    logger.info("App started successfully")
+        page.on_keyboard_event = _on_keyboard
+
+        # --- show the dashboard ---
+        navigation.show_main_dashboard(page, get_view_for_index=get_view_for_index)
+        logger.info("App started successfully")
+    except Exception as ex:
+        logger.error("FATAL: App startup failed: %s", ex, exc_info=True)
+        # Show a critical error screen
+        try:
+            page.root = ft.Container(
+                padding=20,
+                content=ft.Column([
+                    ft.Icon(ft.Icons.ERROR, color="red", size=48),
+                    ft.Text("CRITICAL STARTUP ERROR", color="red",
+                            size=24, weight=ft.FontWeight.BOLD),
+                    ft.Text(str(ex)),
+                ], scroll=True),
+            )
+            page.update()
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":

@@ -32,12 +32,12 @@ def show_main_dashboard(page: ft.Page, *, get_view_for_index: Callable) -> None:
     from ui.theme import effective_theme_mode
     theme_mode = effective_theme_mode(page)
 
-    content_area = ft.Container(expand=True, padding=ft.padding.all(0))
+    content_area = ft.Container(expand=True, padding=0)
     page.content_area = content_area
 
     # Logo / title row at the very top
     title_row = ft.Container(
-        padding=ft.padding.symmetric(horizontal=20, vertical=10),
+        padding=ft.Padding(left=20, right=20, top=10, bottom=10),
         bgcolor=page_bg(theme_mode),
         content=ft.Row(
             [
@@ -48,7 +48,7 @@ def show_main_dashboard(page: ft.Page, *, get_view_for_index: Callable) -> None:
                             border_radius=8,
                             bgcolor=PRIMARY,
                             content=ft.Icon(ft.Icons.HUB, color="#1F2937", size=20),
-                            alignment=ft.alignment.center,
+                            alignment=ft.Alignment(0, 0),
                         ),
                         ft.Column(
                             [
@@ -94,18 +94,16 @@ def show_main_dashboard(page: ft.Page, *, get_view_for_index: Callable) -> None:
     def _build_item(i, icon, label, is_selected):
         return ft.Container(
             content=_item_content(icon, label, is_selected),
-            padding=ft.padding.symmetric(vertical=8, horizontal=16),
+            padding=ft.Padding(left=16, right=16, top=8, bottom=8),
             expand=True,
-            alignment=ft.alignment.center,
+            alignment=ft.Alignment(0, 0),
             on_click=lambda e, idx=i: _select(idx),
             border_radius=8,
             ink=True,
             tooltip=f"{label} (tab {i+1} of {len(_DESTINATIONS)})",
             bgcolor=ft.Colors.with_opacity(0.08, PRIMARY) if is_selected else None,
-            border=ft.border.only(
-                bottom=ft.border.BorderSide(2, PRIMARY) if is_selected
-                else ft.border.BorderSide(0, ft.Colors.TRANSPARENT),
-            ),
+            border=ft.Border(bottom=ft.BorderSide(2, PRIMARY) if is_selected
+                else ft.BorderSide(0, ft.Colors.TRANSPARENT),),
         )
 
     def _rebuild_nav():
@@ -143,9 +141,9 @@ def show_main_dashboard(page: ft.Page, *, get_view_for_index: Callable) -> None:
     content_area.content = get_view_for_index(0)
 
     nav_container = ft.Container(
-        padding=ft.padding.symmetric(horizontal=20, vertical=6),
+        padding=ft.Padding(left=20, right=20, top=6, bottom=6),
         bgcolor=page_bg(theme_mode),
-        border=ft.border.only(bottom=ft.border.BorderSide(1, SURFACE_DARK if theme_mode == "dark" else SURFACE_LIGHT)),
+        border=ft.Border(bottom=ft.BorderSide(1, SURFACE_DARK if theme_mode == "dark" else SURFACE_LIGHT)),
         content=nav_row,
     )
 
@@ -157,8 +155,7 @@ def show_main_dashboard(page: ft.Page, *, get_view_for_index: Callable) -> None:
             content_area,
         ],
         expand=True,
-        spacing=0,
-    )
+        spacing=0)
 
     page.root = ft.Container(expand=True, bgcolor=page_bg(theme_mode), content=dashboard)
     page.update()

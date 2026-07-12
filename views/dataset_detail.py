@@ -88,8 +88,7 @@ def get_dataset_detail_view(page: ft.Page, dataset_id: str,
 
     header_actions = ft.Row(
         [back_btn, favorite_btn, open_in_browser_btn],
-        spacing=8, wrap=True,
-    )
+        spacing=8, wrap=True)
 
     # ----- Loading placeholder -------------------------------------------
     loading_col = ft.Column([loading_view("Loading dataset…", theme_mode)],
@@ -116,8 +115,7 @@ def get_dataset_detail_view(page: ft.Page, dataset_id: str,
     main_col = ft.Column(
         [header, content_col],
         spacing=16,
-        expand=True,
-    )
+        expand=True)
 
     # ----- Async fetch ----------------------------------------------------
     def _fetch():
@@ -304,8 +302,8 @@ def _build_stats_overview(dataset: Dict[str, Any], theme_mode: str) -> ft.Contro
                 spacing=10, wrap=True, run_spacing=10,
             ),
             ft.Container(
-                padding=ft.padding.symmetric(horizontal=10, vertical=6),
-                border=ft.border.all(1, border_color(theme_mode)),
+                
+                border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
                 border_radius=8,
                 bgcolor=surface_bg(theme_mode),
                 content=ft.Row(
@@ -340,8 +338,7 @@ def _build_section(title: str, content: ft.Control, theme_mode: str,
             section_header(title, theme_mode=theme_mode, subtitle=subtitle),
             content,
         ],
-        spacing=8,
-    )
+        spacing=8)
 
 
 def _build_card_data_section(dataset: Dict[str, Any], theme_mode: str) -> ft.Control:
@@ -376,7 +373,7 @@ def _build_card_data_section(dataset: Dict[str, Any], theme_mode: str) -> ft.Con
                     ft.DataCell(ft.Text(name, size=12, color=text_color(theme_mode),
                                         selectable=True)),
                     ft.DataCell(ft.Container(
-                        padding=ft.padding.symmetric(horizontal=8, vertical=2),
+                        padding=ft.Padding(left=8, right=8, top=2, bottom=2),
                         border_radius=6,
                         bgcolor=ft.Colors.with_opacity(0.1, INFO),
                         content=ft.Text(dtype, size=11, color=INFO,
@@ -392,7 +389,7 @@ def _build_card_data_section(dataset: Dict[str, Any], theme_mode: str) -> ft.Con
                                       color=muted_text_color(theme_mode))),
             ],
             rows=feature_rows[1:],  # skip the header row we added
-            horizontal_lines=ft.border.BorderSide(1, border_color(theme_mode)),
+            horizontal_lines=ft.BorderSide(1, border_color(theme_mode)),
             heading_row_height=36,
             data_row_min_height=32,
             column_spacing=20,
@@ -416,7 +413,7 @@ def _build_card_data_section(dataset: Dict[str, Any], theme_mode: str) -> ft.Con
             split_rows.append(ft.DataRow(
                 cells=[
                     ft.DataCell(ft.Container(
-                        padding=ft.padding.symmetric(horizontal=8, vertical=2),
+                        padding=ft.Padding(left=8, right=8, top=2, bottom=2),
                         border_radius=6,
                         bgcolor=ft.Colors.with_opacity(0.1, SUCCESS),
                         content=ft.Text(name, size=11, color=SUCCESS,
@@ -435,7 +432,7 @@ def _build_card_data_section(dataset: Dict[str, Any], theme_mode: str) -> ft.Con
                 ft.DataColumn(ft.Text("Size", size=11, color=muted_text_color(theme_mode))),
             ],
             rows=split_rows,
-            horizontal_lines=ft.border.BorderSide(1, border_color(theme_mode)),
+            horizontal_lines=ft.BorderSide(1, border_color(theme_mode)),
             heading_row_height=36,
             data_row_min_height=32,
             column_spacing=20,
@@ -452,7 +449,7 @@ def _build_card_data_section(dataset: Dict[str, Any], theme_mode: str) -> ft.Con
         for cfg in configs:
             name = cfg.get("config_name", cfg.get("name", "?"))
             config_chips.append(tag_chip(name, color=ACCENT, theme_mode=theme_mode))
-        sections.append(ft.Wrap(config_chips, spacing=6, run_spacing=4))
+        sections.append(ft.Row(config_chips, wrap=True, spacing=6, run_spacing=4))
 
     return ft.Column(sections, spacing=6)
 
@@ -553,7 +550,7 @@ def _build_files_section(dataset: Dict[str, Any], theme_mode: str) -> ft.Control
             ft.DataColumn(ft.Text("Size", size=11, color=muted_text_color(theme_mode))),
         ],
         rows=rows,
-        horizontal_lines=ft.border.BorderSide(1, border_color(theme_mode)),
+        horizontal_lines=ft.BorderSide(1, border_color(theme_mode)),
         heading_row_height=36,
         data_row_min_height=32,
         column_spacing=20,
@@ -593,7 +590,7 @@ def _build_viewer_section(page: ft.Page, state: Dict[str, Any],
         dense=True, border_radius=8, text_size=12,
         border_color=border_color(theme_mode),
         width=200,
-        on_change=lambda e: _on_config_change(page, state, e.control.value,
+        on_select=lambda e: _on_config_change(page, state, e.control.value,
                                               viewer_content, theme_mode),
     )
     split_dd = ft.Dropdown(
@@ -603,7 +600,7 @@ def _build_viewer_section(page: ft.Page, state: Dict[str, Any],
         dense=True, border_radius=8, text_size=12,
         border_color=border_color(theme_mode),
         width=200,
-        on_change=lambda e: _on_split_change(page, state, e.control.value,
+        on_select=lambda e: _on_split_change(page, state, e.control.value,
                                              viewer_content, theme_mode),
     )
 
@@ -615,7 +612,7 @@ def _build_viewer_section(page: ft.Page, state: Dict[str, Any],
         dense=True, border_radius=8, text_size=12,
         border_color=border_color(theme_mode),
         width=120,
-        on_change=lambda e: _on_rows_per_page_change(page, state, int(e.control.value),
+        on_select=lambda e: _on_rows_per_page_change(page, state, int(e.control.value),
                                                      viewer_content, theme_mode),
     )
 
@@ -629,8 +626,7 @@ def _build_viewer_section(page: ft.Page, state: Dict[str, Any],
 
     selectors = ft.Row(
         [config_dd, split_dd, rows_per_page],
-        spacing=8, wrap=True, vertical_alignment=ft.CrossAxisAlignment.CENTER,
-    )
+        spacing=8, wrap=True, vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
     pagination_row = ft.Row(
         [
@@ -658,8 +654,7 @@ def _build_viewer_section(page: ft.Page, state: Dict[str, Any],
             viewer_content,
             pagination_row,
         ],
-        spacing=10,
-    )
+        spacing=10)
 
 
 def _on_config_change(page: ft.Page, state: Dict[str, Any], new_config: str,
@@ -816,7 +811,7 @@ def _render_rows_section(page: ft.Page, state: Dict[str, Any],
         table = ft.DataTable(
             columns=columns,
             rows=data_rows,
-            horizontal_lines=ft.border.BorderSide(1, border_color(theme_mode)),
+            horizontal_lines=ft.BorderSide(1, border_color(theme_mode)),
             heading_row_height=36,
             data_row_min_height=36,
             column_spacing=16,
@@ -824,7 +819,7 @@ def _render_rows_section(page: ft.Page, state: Dict[str, Any],
         )
 
         viewer_content.controls.append(ft.Container(
-            border=ft.border.all(1, border_color(theme_mode)),
+            border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
             border_radius=8,
             padding=8,
             bgcolor=surface_bg(theme_mode),

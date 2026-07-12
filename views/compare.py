@@ -100,8 +100,7 @@ def get_compare_view(page: ft.Page) -> ft.Control:
             content_col,
         ],
         spacing=12,
-        expand=True,
-    )
+        expand=True)
 
     # Initial render
     _refresh_all(page, state, content_col, chips_row, theme_mode)
@@ -219,8 +218,8 @@ def _refresh_chips(state: Dict[str, Any], chips_row: ft.Row, theme_mode: str) ->
                             ],
                             spacing=6, tight=True,
                         ),
-                        padding=ft.padding.symmetric(horizontal=8, vertical=2),
-                        border=ft.border.all(1, border_color(theme_mode)),
+                        padding=ft.Padding(left=8, right=8, top=2, bottom=2),
+                        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
                         border_radius=16,
                         bgcolor=surface_bg(theme_mode),
                     )
@@ -343,7 +342,7 @@ def _render_comparison(state: Dict[str, Any], content_col: ft.Column,
                     display = format_compact(val)
                 cells.append(ft.DataCell(
                     ft.Container(
-                        padding=ft.padding.symmetric(horizontal=8, vertical=4),
+                        padding=ft.Padding(left=8, right=8, top=4, bottom=4),
                         border_radius=6,
                         bgcolor=ft.Colors.with_opacity(0.15, color) if is_best else None,
                         content=ft.Text(display, size=12,
@@ -440,7 +439,7 @@ def _render_comparison(state: Dict[str, Any], content_col: ft.Column,
                 *[ft.DataColumn(ft.Text("", size=11)) for _ in datasets],
             ],
             rows=data_rows,
-            horizontal_lines=ft.border.BorderSide(1, border_color(theme_mode)),
+            horizontal_lines=ft.BorderSide(1, border_color(theme_mode)),
             heading_row_height=0,
             data_row_min_height=40,
             column_spacing=16,
@@ -449,8 +448,8 @@ def _render_comparison(state: Dict[str, Any], content_col: ft.Column,
 
         content_col.controls.append(
             ft.Container(
-                padding=ft.padding.all(14),
-                border=ft.border.all(1, border_color(theme_mode)),
+                padding=14,
+                border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
                 border_radius=10,
                 bgcolor=surface_bg(theme_mode),
                 content=ft.Column(
@@ -460,11 +459,9 @@ def _render_comparison(state: Dict[str, Any], content_col: ft.Column,
                                        subtitle="Best value in each row is highlighted"),
                         ft.Column(
                             [table],
-                            scroll=ft.ScrollMode.AUTO,
-                        ),
+                            scroll=ft.ScrollMode.AUTO),
                     ],
-                    spacing=10,
-                ),
+                    spacing=10),
             )
         )
 

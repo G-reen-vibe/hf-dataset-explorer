@@ -48,8 +48,7 @@ def make_get_view_for_index(page: ft.Page):
                             font_family="Consolas"),
                 ],
                 scroll=True,
-                padding=20,
-            )
+                )
 
     return get_view_for_index
 

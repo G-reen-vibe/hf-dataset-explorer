@@ -54,7 +54,7 @@ def get_analytics_view(page: ft.Page) -> ft.Control:
                  ft.dropdown.Option("200"), ft.dropdown.Option("500")],
         dense=True, width=160, text_size=12,
         border_color=border_color(theme_mode), border_radius=8,
-        on_change=lambda e: _refresh(page, state, content_col,
+        on_select=lambda e: _refresh(page, state, content_col,
                                       int(e.control.value), theme_mode),
     )
 
@@ -63,13 +63,11 @@ def get_analytics_view(page: ft.Page) -> ft.Control:
             ft.Row(
                 [header, sample_dd],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-                vertical_alignment=ft.CrossAxisAlignment.CENTER,
-            ),
+                vertical_alignment=ft.CrossAxisAlignment.CENTER),
             content_col,
         ],
         spacing=12,
-        expand=True,
-    )
+        expand=True)
 
     def _initial():
         _refresh(page, state, content_col, 100, theme_mode)
@@ -255,8 +253,8 @@ def _build_bar_chart(title: str, items: List[tuple], color: str,
         )
 
     return ft.Container(
-        padding=ft.padding.all(14),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=14,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(
@@ -265,8 +263,7 @@ def _build_bar_chart(title: str, items: List[tuple], color: str,
                 ft.Column(rows, spacing=8, tight=True),
             ],
             spacing=10,
-            scroll=ft.ScrollMode.AUTO,
-        ),
+            scroll=ft.ScrollMode.AUTO),
     )
 
 
@@ -308,8 +305,8 @@ def _build_tag_distribution(datasets: List[Dict[str, Any]],
             pct = (count / total) * 100
             chips.append(
                 ft.Container(
-                    padding=ft.padding.symmetric(horizontal=10, vertical=6),
-                    border=ft.border.all(1, border_color(theme_mode)),
+                    padding=ft.Padding(left=10, right=10, top=6, bottom=6),
+                    border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
                     border_radius=8,
                     bgcolor=surface_bg(theme_mode),
                     content=ft.Row(
@@ -330,15 +327,15 @@ def _build_tag_distribution(datasets: List[Dict[str, Any]],
                 [
                     ft.Text(cat.upper(), size=10, weight=ft.FontWeight.BOLD,
                             color=muted_text_color(theme_mode)),
-                    ft.Wrap(chips, spacing=6, run_spacing=4),
+                    ft.Row(chips, wrap=True, spacing=6, run_spacing=4),
                 ],
                 spacing=6, tight=True,
             )
         )
 
     return ft.Container(
-        padding=ft.padding.all(14),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=14,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(sections, spacing=12),
@@ -393,8 +390,8 @@ def _build_top_authors(datasets: List[Dict[str, Any]],
         )
 
     return ft.Container(
-        padding=ft.padding.all(14),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=14,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(
@@ -404,6 +401,5 @@ def _build_top_authors(datasets: List[Dict[str, Any]],
                                subtitle="By dataset count among sampled popular datasets"),
                 ft.Column(rows, spacing=8, tight=True),
             ],
-            spacing=10,
-        ),
+            spacing=10),
     )

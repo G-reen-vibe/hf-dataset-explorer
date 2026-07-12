@@ -76,8 +76,8 @@ def get_settings_view(page: ft.Page) -> ft.Control:
 
     # ----- Sections -------------------------------------------------------
     api_section = ft.Container(
-        padding=ft.padding.all(16),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=16,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(
@@ -115,8 +115,8 @@ def get_settings_view(page: ft.Page) -> ft.Control:
     )
 
     appearance_section = ft.Container(
-        padding=ft.padding.all(16),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=16,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(
@@ -140,8 +140,8 @@ def get_settings_view(page: ft.Page) -> ft.Control:
     )
 
     data_section = ft.Container(
-        padding=ft.padding.all(16),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=16,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(
@@ -186,8 +186,8 @@ def get_settings_view(page: ft.Page) -> ft.Control:
     )
 
     about_section = ft.Container(
-        padding=ft.padding.all(16),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=16,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(
@@ -236,8 +236,7 @@ def get_settings_view(page: ft.Page) -> ft.Control:
         ],
         spacing=16,
         scroll=ft.ScrollMode.AUTO,
-        expand=True,
-    )
+        expand=True)
 
     return page_container(main_col, theme_mode=theme_mode)
 

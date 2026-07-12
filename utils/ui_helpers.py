@@ -152,8 +152,8 @@ def stat_chip(icon: str, label: str, value: str, color: str = INFO,
               theme_mode: str = "dark") -> ft.Control:
     """Small horizontal stat block: icon + label + value."""
     return ft.Container(
-        padding=ft.padding.symmetric(horizontal=10, vertical=8),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=ft.Padding(left=10, right=10, top=8, bottom=8),
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=8,
         bgcolor=surface_bg(theme_mode),
         content=ft.Row(
@@ -183,10 +183,10 @@ def tag_chip(text: str, color: str = ACCENT, on_click: Optional[Callable] = None
     pad_h = 6 if small else 8
     pad_v = 2 if small else 3
     return ft.Container(
-        padding=ft.padding.symmetric(horizontal=pad_h, vertical=pad_v),
+        padding=ft.Padding(left=pad_h, right=pad_h, top=pad_v, bottom=pad_v),
         border_radius=12,
         bgcolor=ft.Colors.with_opacity(0.12, color),
-        border=ft.border.all(1, ft.Colors.with_opacity(0.3, color)),
+        border=ft.Border(top=ft.BorderSide(1, ft.Colors.with_opacity(0.3, color)), bottom=ft.BorderSide(1, ft.Colors.with_opacity(0.3, color)), left=ft.BorderSide(1, ft.Colors.with_opacity(0.3, color)), right=ft.BorderSide(1, ft.Colors.with_opacity(0.3, color))),
         content=ft.Text(
             text,
             size=text_size,
@@ -236,7 +236,7 @@ def tag_row(tags: List[str], theme_mode: str = "dark",
     if len(chips) < len(tags):
         chips.append(ft.Text(f"+{len(tags) - len(chips)} more",
                               size=10, color=muted_text_color(theme_mode)))
-    return ft.Wrap(chips, spacing=6, run_spacing=4)
+    return ft.Row(chips, wrap=True, spacing=6, run_spacing=4)
 
 
 def section_header(title: str, theme_mode: str = "dark",
@@ -254,8 +254,7 @@ def section_header(title: str, theme_mode: str = "dark",
             action or ft.Container(),
         ],
         alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-        vertical_alignment=ft.CrossAxisAlignment.CENTER,
-    )
+        vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
 
 # --------------------------------------------------------------------------- #
@@ -372,7 +371,7 @@ def dataset_card(
         ink=True,
         on_click=_on_click,
         padding=14,
-        border=ft.border.all(1, border_color(theme_mode)),
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=10,
         bgcolor=surface_bg(theme_mode),
         content=ft.Column(children, spacing=10, tight=True),
@@ -385,8 +384,8 @@ def stat_tile(label: str, value: str, hint: str = "",
               color: str = INFO, theme_mode: str = "dark") -> ft.Control:
     """A large square-ish stat tile for dashboards."""
     return ft.Container(
-        padding=ft.padding.all(16),
-        border=ft.border.all(1, border_color(theme_mode)),
+        padding=16,
+        border=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         border_radius=12,
         bgcolor=surface_bg(theme_mode),
         expand=True,
@@ -396,8 +395,7 @@ def stat_tile(label: str, value: str, hint: str = "",
                     [
                         ft.Icon(icon, color=color, size=22),
                         ft.Container(expand=True),
-                    ],
-                ),
+                    ]),
                 ft.Container(height=4),
                 ft.Text(value, size=22, weight=ft.FontWeight.BOLD,
                         color=text_color(theme_mode)),
@@ -414,12 +412,11 @@ def page_container(content: ft.Control, theme_mode: str = "dark") -> ft.Control:
     """Wrap a view's content in a scrollable padded container."""
     return ft.Container(
         expand=True,
-        padding=ft.padding.all(24),
+        padding=24,
         content=ft.Column(
             [content],
             scroll=ft.ScrollMode.AUTO,
-            expand=True,
-        ),
+            expand=True),
     )
 
 
@@ -435,7 +432,7 @@ def primary_button(text: str, on_click: Callable, *,
         bgcolor=PRIMARY,
         color="#1F2937",
         style=ft.ButtonStyle(
-            padding=ft.padding.symmetric(horizontal=18, vertical=10),
+            padding=ft.Padding(left=18, right=18, top=10, bottom=10),
             shape=ft.RoundedRectangleBorder(radius=8),
         ),
         expand=expand,
@@ -453,9 +450,9 @@ def secondary_button(text: str, on_click: Callable, *,
         on_click=on_click,
         disabled=disabled,
         style=ft.ButtonStyle(
-            padding=ft.padding.symmetric(horizontal=18, vertical=10),
+            padding=ft.Padding(left=18, right=18, top=10, bottom=10),
             shape=ft.RoundedRectangleBorder(radius=8),
-            side=ft.border.all(1, border_color(theme_mode)),
+            side=ft.Border(top=ft.BorderSide(1, border_color(theme_mode)), bottom=ft.BorderSide(1, border_color(theme_mode)), left=ft.BorderSide(1, border_color(theme_mode)), right=ft.BorderSide(1, border_color(theme_mode))),
         ),
         expand=expand,
     )

@@ -111,7 +111,7 @@ def get_explore_view(page: ft.Page) -> ft.Control:
         border_radius=8,
         text_size=13,
         width=200,
-        on_change=lambda e: _do_search(page, state, search_field.value,
+        on_select=lambda e: _do_search(page, state, search_field.value,
                                        results_col, stats_row, theme_mode,
                                        sort=e.control.value, author=author_field.value),
     )
@@ -131,14 +131,12 @@ def get_explore_view(page: ft.Page) -> ft.Control:
     )
     stats_row = ft.Row(
         [stats_text, ft.Container(expand=True), clear_btn],
-        vertical_alignment=ft.CrossAxisAlignment.CENTER,
-    )
+        vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
     # ----- Results column -------------------------------------------------
     loading_indicator = ft.Column(
         [loading_view("Fetching datasets…", theme_mode)],
-        visible=False,
-    )
+        visible=False)
     results_col = ft.Column(spacing=10, expand=True)
 
     # ----- Filter dialog --------------------------------------------------
@@ -163,7 +161,7 @@ def get_explore_view(page: ft.Page) -> ft.Control:
                                       author=author_field.value, sort=sort_dropdown.value),
         bgcolor=PRIMARY, color="#1F2937",
         style=ft.ButtonStyle(
-            padding=ft.padding.symmetric(horizontal=20, vertical=10),
+            padding=ft.Padding(left=20, right=20, top=10, bottom=10),
             shape=ft.RoundedRectangleBorder(radius=8),
         ),
     )
@@ -175,8 +173,8 @@ def get_explore_view(page: ft.Page) -> ft.Control:
         controls=[
             ft.Container(
                 content=ft.Text(label, size=11, color=text_color(theme_mode)),
-                padding=ft.padding.symmetric(horizontal=10, vertical=6),
-                border=ft.border.all(1, ft.Colors.with_opacity(0.15, text_color(theme_mode))),
+                
+                border=ft.Border(top=ft.BorderSide(1, ft.Colors.with_opacity(0.15, text_color(theme_mode))), bottom=ft.BorderSide(1, ft.Colors.with_opacity(0.15, text_color(theme_mode))), left=ft.BorderSide(1, ft.Colors.with_opacity(0.15, text_color(theme_mode))), right=ft.BorderSide(1, ft.Colors.with_opacity(0.15, text_color(theme_mode)))),
                 border_radius=16,
                 ink=True,
                 on_click=lambda e, k=key, lbl=label: _quick_filter(
@@ -202,15 +200,13 @@ def get_explore_view(page: ft.Page) -> ft.Control:
     search_bar = ft.Row(
         [search_field, search_button],
         spacing=8,
-        vertical_alignment=ft.CrossAxisAlignment.CENTER,
-    )
+        vertical_alignment=ft.CrossAxisAlignment.CENTER)
 
     secondary_bar = ft.Row(
         [author_field, sort_dropdown, filter_button],
         spacing=8,
         vertical_alignment=ft.CrossAxisAlignment.CENTER,
-        wrap=True,
-    )
+        wrap=True)
 
     header = section_header(
         "Explore Datasets",
@@ -231,12 +227,14 @@ def get_explore_view(page: ft.Page) -> ft.Control:
             results_col,
         ],
         spacing=10,
-        expand=True,
-    )
+        expand=True)
 
     # ----- Initial render -------------------------------------------------
     # Defer the initial search to a background thread so the UI paints first.
+    # Add a small delay so the page can register the controls before we try to update them.
     def _initial_load():
+        import time
+        time.sleep(0.3)  # give the page time to register the controls
         _do_search(page, state, state["query"], results_col, stats_row,
                    theme_mode, author=state["author"], sort=state["sort"],
                    initial=True)
@@ -389,7 +387,7 @@ def _render_results(page: ft.Page, state: Dict[str, Any],
             results_col.controls.append(
                 ft.Container(
                     padding=10,
-                    alignment=ft.alignment.center,
+                    alignment=ft.Alignment(0, 0),
                     content=secondary_button(
                         "Load more",
                         lambda e: _load_more(page, state, results_col, theme_mode),
@@ -398,7 +396,11 @@ def _render_results(page: ft.Page, state: Dict[str, Any],
                 )
             )
 
-        results_col.update()
+        try:
+            results_col.update()
+        except Exception:
+            # Control may not be added to page yet during initial render
+            pass
     except Exception as ex:
         logger.error("Render error: %s", ex, exc_info=True)
 
@@ -516,10 +518,9 @@ def _show_filter_dialog(page: ft.Page, state: Dict[str, Any],
                 content=ft.Text(_pretty(opt), size=11,
                                 color=color if is_on else text_color(theme_mode),
                                 weight=ft.FontWeight.W_600 if is_on else ft.FontWeight.NORMAL),
-                padding=ft.padding.symmetric(horizontal=8, vertical=4),
+                padding=ft.Padding(left=8, right=8, top=4, bottom=4),
                 border_radius=12,
-                border=ft.border.all(1, color if is_on
-                                      else ft.Colors.with_opacity(0.2, text_color(theme_mode))),
+                border=ft.Border(top=ft.BorderSide(1, color if is_on else ft.Colors.with_opacity(0.2, text_color(theme_mode))), bottom=ft.BorderSide(1, color if is_on else ft.Colors.with_opacity(0.2, text_color(theme_mode))), left=ft.BorderSide(1, color if is_on else ft.Colors.with_opacity(0.2, text_color(theme_mode))), right=ft.BorderSide(1, color if is_on else ft.Colors.with_opacity(0.2, text_color(theme_mode)))),
                 bgcolor=ft.Colors.with_opacity(0.12, color) if is_on else None,
                 ink=True,
                 on_click=lambda e, o=opt, c=color: _toggle_chip(e, o, c),
@@ -529,7 +530,7 @@ def _show_filter_dialog(page: ft.Page, state: Dict[str, Any],
             [
                 ft.Text(title, size=12, weight=ft.FontWeight.W_600,
                         color=text_color(theme_mode)),
-                ft.Wrap(chips, spacing=6, run_spacing=4),
+                ft.Row(chips, wrap=True, spacing=6, run_spacing=4),
             ],
             spacing=6, tight=True,
         )
@@ -568,8 +569,7 @@ def _show_filter_dialog(page: ft.Page, state: Dict[str, Any],
         spacing=10,
         scroll=ft.ScrollMode.AUTO,
         tight=True,
-        height=400,
-    )
+        height=400)
 
     def _apply(e):
         state["tags"] = list(selected)
@@ -580,7 +580,7 @@ def _show_filter_dialog(page: ft.Page, state: Dict[str, Any],
                 ft.Container(
                     content=ft.Text(_pretty(tag), size=10,
                                     color=ACCENT, weight=ft.FontWeight.W_600),
-                    padding=ft.padding.symmetric(horizontal=6, vertical=2),
+                    padding=ft.Padding(left=6, right=6, top=2, bottom=2),
                     border_radius=10,
                     bgcolor=ft.Colors.with_opacity(0.12, ACCENT),
                 )

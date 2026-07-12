@@ -39,8 +39,7 @@ def get_favorites_view(page: ft.Page) -> ft.Control:
     main_col = ft.Column(
         [header, content_col],
         spacing=12,
-        expand=True,
-    )
+        expand=True)
 
     def _render():
         try:
